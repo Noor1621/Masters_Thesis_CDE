@@ -1,0 +1,300 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="preload" as="image" href="pics/lst_deple_2025.png"><link rel="preload" as="image" href="pics/lst_deple_2018.png"><link rel="preload" as="image" href="pics/lst_deple_2019.png"><link rel="preload" as="image" href="pics/lst_deple_2020.png"><link rel="preload" as="image" href="pics/lst_deple_2021.png"><link rel="preload" as="image" href="pics/lst_deple_2022.png"><link rel="preload" as="image" href="pics/lst_deple_2023.png"><link rel="preload" as="image" href="pics/lst_deple_2024.png"><title>Multi-Year Snow Variability Tool — Hohe Tauern Snow Thesis</title><meta name="author" content="Syeda Noor ul Saba Bukhari"><meta property="og:type" content="website"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content="@Lovable"><meta name="description" content="Interactive multi-year comparison of NDSI and dry/wet snow classification maps across Hohe Tauern National Park, 2018–2025."><meta property="og:title" content="Multi-Year Snow Variability Tool — Hohe Tauern Snow Thesis"><meta property="og:description" content="Pick any two years and compare NDSI or snow-classification maps side by side across the 2018–2025 record."><meta property="og:image" content="pics/fig_1.jpeg"><meta name="twitter:image" content="pics/fig_1.jpeg"><link rel="icon" href="pics/favicon.ico" type="image/x-icon"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous"><link rel="stylesheet" href="css/styles.css"></head><body><div aria-hidden="true" style="position:fixed;top:0;left:0;height:3px;width:0%;background:linear-gradient(90deg, var(--color-thesis-accent-glow), var(--color-thesis-accent), var(--color-thesis-aurora));z-index:60;box-shadow:0 0 12px rgba(125,227,240,0.6);transition:width 80ms linear"></div><nav class="sticky top-0 z-40 border-b backdrop-blur-md" style="background-color:rgba(255,255,255,0.88);border-color:rgba(11,29,42,0.08);color:var(--color-thesis-ink)"><div class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3"><a href="index.html" class="font-display text-base tracking-tight"><span style="color:var(--color-thesis-accent)">❄</span> <span class="opacity-90">Hohe Tauern</span><span class="opacity-50"> · Snow Thesis</span></a><div class="hidden flex-wrap justify-end gap-1 lg:flex"><a href="introduction.html" style="opacity:0.75" class="rounded-full px-3 py-1.5 text-[10px] uppercase tracking-[0.2em] transition-opacity hover:opacity-100">Introduction</a><a href="objectives.html" style="opacity:0.75" class="rounded-full px-3 py-1.5 text-[10px] uppercase tracking-[0.2em] transition-opacity hover:opacity-100">Objectives</a><a href="state-of-art.html" style="opacity:0.75" class="rounded-full px-3 py-1.5 text-[10px] uppercase tracking-[0.2em] transition-opacity hover:opacity-100">State of Art</a><a href="study-area.html" style="opacity:0.75" class="rounded-full px-3 py-1.5 text-[10px] uppercase tracking-[0.2em] transition-opacity hover:opacity-100">Study Area</a><a href="methodology.html" style="opacity:0.75" class="rounded-full px-3 py-1.5 text-[10px] uppercase tracking-[0.2em] transition-opacity hover:opacity-100">Methodology</a><a href="results.html" style="opacity:0.75" class="rounded-full px-3 py-1.5 text-[10px] uppercase tracking-[0.2em] transition-opacity hover:opacity-100">Results</a><a href="climate-drivers.html" style="opacity:0.75" class="rounded-full px-3 py-1.5 text-[10px] uppercase tracking-[0.2em] transition-opacity hover:opacity-100">Climatic Drivers</a><a style="opacity:1;background-color:var(--color-thesis-accent);color:#fff" href="year-compare.html" class="rounded-full px-3 py-1.5 text-[10px] uppercase tracking-[0.2em] transition-opacity hover:opacity-100" data-status="active" aria-current="page">Multi-Year Snow Variability Tool</a><a href="discussion.html" style="opacity:0.75" class="rounded-full px-3 py-1.5 text-[10px] uppercase tracking-[0.2em] transition-opacity hover:opacity-100">Discussion</a><a href="conclusion.html" style="opacity:0.75" class="rounded-full px-3 py-1.5 text-[10px] uppercase tracking-[0.2em] transition-opacity hover:opacity-100">Conclusion</a><a href="gee-code.html" style="opacity:0.75" class="rounded-full px-3 py-1.5 text-[10px] uppercase tracking-[0.2em] transition-opacity hover:opacity-100">GEE Code</a><a href="references.html" style="opacity:0.75" class="rounded-full px-3 py-1.5 text-[10px] uppercase tracking-[0.2em] transition-opacity hover:opacity-100">References</a></div><details class="relative lg:hidden"><summary class="cursor-pointer list-none rounded-md border px-3 py-1.5 text-[10px] uppercase tracking-[0.2em]" style="border-color:currentColor">Menu</summary><div class="absolute right-0 top-full z-50 mt-2 flex w-56 flex-col rounded-md border bg-white p-2 shadow-xl" style="color:var(--color-thesis-ink);border-color:rgba(11,29,42,0.1)"><a href="introduction.html" class="rounded px-3 py-1.5 text-xs uppercase tracking-[0.2em] hover:bg-slate-100">Introduction</a><a href="objectives.html" class="rounded px-3 py-1.5 text-xs uppercase tracking-[0.2em] hover:bg-slate-100">Objectives</a><a href="state-of-art.html" class="rounded px-3 py-1.5 text-xs uppercase tracking-[0.2em] hover:bg-slate-100">State of Art</a><a href="study-area.html" class="rounded px-3 py-1.5 text-xs uppercase tracking-[0.2em] hover:bg-slate-100">Study Area</a><a href="methodology.html" class="rounded px-3 py-1.5 text-xs uppercase tracking-[0.2em] hover:bg-slate-100">Methodology</a><a href="results.html" class="rounded px-3 py-1.5 text-xs uppercase tracking-[0.2em] hover:bg-slate-100">Results</a><a href="climate-drivers.html" class="rounded px-3 py-1.5 text-xs uppercase tracking-[0.2em] hover:bg-slate-100">Climatic Drivers</a><a class="rounded px-3 py-1.5 text-xs uppercase tracking-[0.2em] hover:bg-slate-100 active" href="year-compare.html" data-status="active" aria-current="page">Multi-Year Snow Variability Tool</a><a href="discussion.html" class="rounded px-3 py-1.5 text-xs uppercase tracking-[0.2em] hover:bg-slate-100">Discussion</a><a href="conclusion.html" class="rounded px-3 py-1.5 text-xs uppercase tracking-[0.2em] hover:bg-slate-100">Conclusion</a><a href="gee-code.html" class="rounded px-3 py-1.5 text-xs uppercase tracking-[0.2em] hover:bg-slate-100">GEE Code</a><a href="references.html" class="rounded px-3 py-1.5 text-xs uppercase tracking-[0.2em] hover:bg-slate-100">References</a></div></details></div></nav><!--$--><div style="background-color:var(--color-thesis-light);color:var(--color-thesis-ink)"><header class="thesis-aurora border-b" style="border-color:rgba(11,29,42,0.08);color:var(--color-thesis-ice)"><div aria-hidden="true" class="thesis-snow"><span class="thesis-snow-flake" style="left:0%;animation-delay:0s;animation-duration:9s;font-size:8px;opacity:0.35">❄</span><span class="thesis-snow-flake" style="left:4.17%;animation-delay:-1.6s;animation-duration:10s;font-size:11px;opacity:0.5">❄</span><span class="thesis-snow-flake" style="left:8.34%;animation-delay:-3.2s;animation-duration:11s;font-size:14px;opacity:0.6499999999999999">❄</span><span class="thesis-snow-flake" style="left:12.51%;animation-delay:-4.800000000000001s;animation-duration:12s;font-size:17px;opacity:0.7999999999999999">❄</span><span class="thesis-snow-flake" style="left:16.68%;animation-delay:-6.4s;animation-duration:13s;font-size:20px;opacity:0.35">❄</span><span class="thesis-snow-flake" style="left:20.85%;animation-delay:-8s;animation-duration:14s;font-size:8px;opacity:0.5">❄</span><span class="thesis-snow-flake" style="left:25.02%;animation-delay:-9.600000000000001s;animation-duration:9s;font-size:11px;opacity:0.6499999999999999">❄</span><span class="thesis-snow-flake" style="left:29.189999999999998%;animation-delay:-11.200000000000001s;animation-duration:10s;font-size:14px;opacity:0.7999999999999999">❄</span><span class="thesis-snow-flake" style="left:33.36%;animation-delay:0s;animation-duration:11s;font-size:17px;opacity:0.35">❄</span><span class="thesis-snow-flake" style="left:37.53%;animation-delay:-1.6s;animation-duration:12s;font-size:20px;opacity:0.5">❄</span><span class="thesis-snow-flake" style="left:41.7%;animation-delay:-3.2s;animation-duration:13s;font-size:8px;opacity:0.6499999999999999">❄</span><span class="thesis-snow-flake" style="left:45.87%;animation-delay:-4.800000000000001s;animation-duration:14s;font-size:11px;opacity:0.7999999999999999">❄</span><span class="thesis-snow-flake" style="left:50.04%;animation-delay:-6.4s;animation-duration:9s;font-size:14px;opacity:0.35">❄</span><span class="thesis-snow-flake" style="left:54.21%;animation-delay:-8s;animation-duration:10s;font-size:17px;opacity:0.5">❄</span><span class="thesis-snow-flake" style="left:58.379999999999995%;animation-delay:-9.600000000000001s;animation-duration:11s;font-size:20px;opacity:0.6499999999999999">❄</span><span class="thesis-snow-flake" style="left:62.55%;animation-delay:-11.200000000000001s;animation-duration:12s;font-size:8px;opacity:0.7999999999999999">❄</span><span class="thesis-snow-flake" style="left:66.72%;animation-delay:0s;animation-duration:13s;font-size:11px;opacity:0.35">❄</span><span class="thesis-snow-flake" style="left:70.89%;animation-delay:-1.6s;animation-duration:14s;font-size:14px;opacity:0.5">❄</span><span class="thesis-snow-flake" style="left:75.06%;animation-delay:-3.2s;animation-duration:9s;font-size:17px;opacity:0.6499999999999999">❄</span><span class="thesis-snow-flake" style="left:79.23%;animation-delay:-4.800000000000001s;animation-duration:10s;font-size:20px;opacity:0.7999999999999999">❄</span><span class="thesis-snow-flake" style="left:83.4%;animation-delay:-6.4s;animation-duration:11s;font-size:8px;opacity:0.35">❄</span><span class="thesis-snow-flake" style="left:87.57%;animation-delay:-8s;animation-duration:12s;font-size:11px;opacity:0.5">❄</span><span class="thesis-snow-flake" style="left:91.74%;animation-delay:-9.600000000000001s;animation-duration:13s;font-size:14px;opacity:0.6499999999999999">❄</span><span class="thesis-snow-flake" style="left:95.91%;animation-delay:-11.200000000000001s;animation-duration:14s;font-size:17px;opacity:0.7999999999999999">❄</span></div><div class="mx-auto max-w-3xl px-6 py-16 md:py-24"><p class="text-xs uppercase tracking-[0.4em]" style="color:var(--color-thesis-accent-glow)">❄ Hohe Tauern Snow Thesis</p><h1 class="font-display mt-4 text-4xl leading-[1.05] md:text-6xl">Multi-Year Snow Variability Tool</h1><p class="mt-6 max-w-2xl text-base opacity-85 md:text-lg">Pick a dataset and any two years to compare snow conditions side by side across the 2018–2025 record. Each dataset is sliced on its own grid so tiles line up exactly on the same geographic footprint.</p></div></header><article class="mx-auto max-w-3xl px-6 py-16 md:py-20"><div class="thesis-prose space-y-5 text-base leading-[1.75] md:text-lg"><h2 class="font-display mt-12 mb-3 text-2xl md:text-3xl" style="color:var(--color-thesis-bg)">Comparison</h2>
+<style>
+  /* The source files in pics/ are never resized or edited.
+     The native canvas below holds the images at their intrinsic dimensions.
+     Only the whole canvas is proportionally scaled for the browser viewport. */
+  .compare-native-viewport{
+    width:100%;
+    overflow:hidden;
+    border-radius:.75rem;
+    background:#fff;
+    border:1px solid rgba(11,29,42,.12);
+    box-shadow:0 10px 25px rgba(11,29,42,.12);
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+  }
+  .compare-native-stage{
+    position:relative;
+    flex:0 0 auto;
+    transform-origin:top left;
+    cursor:ew-resize;
+    user-select:none;
+  }
+  .compare-native-stage img{
+    position:absolute;
+    left:0;
+    top:0;
+    display:block;
+    width:auto;
+    height:auto;
+    max-width:none;
+    max-height:none;
+    margin:0;
+    padding:0;
+  }
+  .compare-native-fill{
+    position:absolute;
+    left:0;
+    top:0;
+    height:100%;
+    overflow:hidden;
+    pointer-events:none;
+  }
+  .compare-native-handle{
+    position:absolute;
+    top:0;
+    bottom:0;
+    width:2px;
+    transform:translateX(-1px);
+    background:linear-gradient(180deg,var(--color-thesis-accent-glow),var(--color-thesis-accent));
+    box-shadow:0 0 12px rgba(125,227,240,.9);
+    pointer-events:none;
+    z-index:10;
+  }
+  .compare-native-handle > span{
+    position:absolute;
+    left:1px;
+    top:50%;
+    transform:translate(-50%,-50%);
+    width:40px;
+    height:40px;
+    border-radius:9999px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#fff;
+    background:var(--color-thesis-accent);
+    box-shadow:0 8px 20px rgba(0,0,0,.2);
+  }
+  @media (max-width:640px){
+    .compare-native-viewport{border-radius:.65rem}
+  }
+</style>
+
+<section class="mx-auto mt-20 w-full max-w-5xl rounded-2xl border p-5 text-left backdrop-blur-md md:p-8 compare-tool"
+  style="border-color:var(--color-thesis-line);background-color:rgba(15,32,53,0.55)">
+  <div class="flex flex-wrap items-center justify-between gap-3">
+    <div>
+      <p class="text-[10px] uppercase tracking-[0.35em]" style="color:var(--color-thesis-accent-glow)">❄ Exact Map Overlay</p>
+      <h2 class="font-display mt-2 text-2xl md:text-3xl">Multi-Year Snow Variability Tool</h2>
+      <p class="mt-1 text-sm opacity-80">Select a dataset and any two years from 2018–2025. Drag the slider to compare the two year-specific map figures.</p>
+    </div>
+    <button type="button" data-role="swap-btn"
+      class="rounded-full border px-4 py-2 text-[10px] uppercase tracking-[0.25em] hover:bg-white/10"
+      style="border-color:var(--color-thesis-line);color:var(--color-thesis-ice)">⇄ Swap</button>
+  </div>
+
+  <div class="mt-6 flex flex-wrap items-end gap-4">
+    <label class="flex flex-col gap-1 text-[10px] uppercase tracking-[0.25em] opacity-80">
+      Dataset
+      <select data-role="dataset-select" class="rounded-md border bg-white/10 px-3 py-2 text-sm font-medium tracking-normal normal-case text-white"
+        style="border-color:var(--color-thesis-line)">
+        <option value="depletion" style="color:#0a1929">LST — Depletion Season</option>
+        <option value="accumulation" style="color:#0a1929">LST — Accumulation Season</option>
+        <option value="snow_accum" style="color:#0a1929">Snow Classification — Accumulation Season</option>
+        <option value="snow_deple" style="color:#0a1929">Snow Classification — Depletion Season</option>
+      </select>
+    </label>
+
+    <label class="flex flex-col gap-1 text-[10px] uppercase tracking-[0.25em] opacity-80">
+      Left year
+      <select data-role="left-select" class="rounded-md border bg-white/10 px-3 py-2 text-sm font-medium tracking-normal normal-case text-white"
+        style="border-color:var(--color-thesis-line)">
+        <option value="2018" style="color:#0a1929">2018</option><option value="2019" style="color:#0a1929">2019</option>
+        <option value="2020" style="color:#0a1929">2020</option><option value="2021" style="color:#0a1929">2021</option>
+        <option value="2022" style="color:#0a1929">2022</option><option value="2023" style="color:#0a1929">2023</option>
+        <option value="2024" style="color:#0a1929">2024</option><option value="2025" style="color:#0a1929">2025</option>
+      </select>
+    </label>
+
+    <span class="pb-2 text-lg" style="color:var(--color-thesis-accent-glow)">vs</span>
+
+    <label class="flex flex-col gap-1 text-[10px] uppercase tracking-[0.25em] opacity-80">
+      Right year
+      <select data-role="right-select" class="rounded-md border bg-white/10 px-3 py-2 text-sm font-medium tracking-normal normal-case text-white"
+        style="border-color:var(--color-thesis-line)">
+        <option value="2018" style="color:#0a1929">2018</option><option value="2019" style="color:#0a1929">2019</option>
+        <option value="2020" style="color:#0a1929">2020</option><option value="2021" style="color:#0a1929">2021</option>
+        <option value="2022" style="color:#0a1929">2022</option><option value="2023" style="color:#0a1929">2023</option>
+        <option value="2024" style="color:#0a1929">2024</option><option value="2025" style="color:#0a1929" selected>2025</option>
+      </select>
+    </label>
+  </div>
+
+  <div class="mt-8 compare-native-viewport" data-role="viewport">
+    <div class="compare-native-stage" data-role="stage" tabindex="0" role="slider"
+      aria-label="Map comparison slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
+      <img data-role="right-img" src="pics/lst_deple_2025.png" alt="" draggable="false">
+      <div class="compare-native-fill" data-role="fill">
+        <img data-role="left-img" src="pics/lst_deple_2018.png" alt="" draggable="false">
+      </div>
+      <div class="compare-native-handle" data-role="handle" style="left:50%">
+        <span>⇔</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+(function(){
+  'use strict';
+
+  var DATASETS = {
+    depletion: {
+      label: 'LST — Depletion Season',
+      file: function(y){ return 'pics/lst_deple_' + y + '.png'; }
+    },
+    accumulation: {
+      label: 'LST — Accumulation Season',
+      file: function(y){ return 'pics/lst_accum_' + y + '.png'; }
+    },
+    snow_accum: {
+      label: 'Snow Classification — Accumulation Season',
+      file: function(y){ return 'pics/snowclass_accum_' + y + '.png'; }
+    },
+    snow_deple: {
+      label: 'Snow Classification — Depletion Season',
+      file: function(y){ return 'pics/snowclass_deple_' + y + '.png'; }
+    }
+  };
+
+  var section = document.querySelector('.compare-tool');
+  if(!section) return;
+
+  var dataset = section.querySelector('[data-role="dataset-select"]');
+  var leftYear = section.querySelector('[data-role="left-select"]');
+  var rightYear = section.querySelector('[data-role="right-select"]');
+  var swap = section.querySelector('[data-role="swap-btn"]');
+  var viewport = section.querySelector('[data-role="viewport"]');
+  var stage = section.querySelector('[data-role="stage"]');
+  var fill = section.querySelector('[data-role="fill"]');
+  var leftImg = section.querySelector('[data-role="left-img"]');
+  var rightImg = section.querySelector('[data-role="right-img"]');
+  var handle = section.querySelector('[data-role="handle"]');
+
+  var pct = 50, dragging = false, renderId = 0;
+
+  function clamp(v){ return Math.max(0, Math.min(100, v)); }
+
+  function naturalSizeReady(){
+    return leftImg.naturalWidth && leftImg.naturalHeight &&
+           rightImg.naturalWidth && rightImg.naturalHeight;
+  }
+
+  function layout(){
+    if(!naturalSizeReady()) return;
+
+    /* Native canvas: NO image width/height is assigned here.
+       The two source images remain at their intrinsic dimensions. */
+    var nativeW = Math.max(leftImg.naturalWidth, rightImg.naturalWidth);
+    var nativeH = Math.max(leftImg.naturalHeight, rightImg.naturalHeight);
+
+    stage.style.width = nativeW + 'px';
+    stage.style.height = nativeH + 'px';
+
+    leftImg.style.width = leftImg.naturalWidth + 'px';
+    leftImg.style.height = leftImg.naturalHeight + 'px';
+    rightImg.style.width = rightImg.naturalWidth + 'px';
+    rightImg.style.height = rightImg.naturalHeight + 'px';
+
+    /* Fit the COMPLETE native canvas to the available page width,
+       preserving its proportions. The source files themselves are unchanged. */
+    var available = Math.max(1, viewport.clientWidth);
+    var scale = Math.min(1, available / nativeW);
+    stage.style.transform = 'scale(' + scale + ')';
+
+    /* Compensate the outer viewport for the scaled stage height. */
+    viewport.style.height = (nativeH * scale) + 'px';
+
+    fill.style.width = pct + '%';
+    handle.style.left = pct + '%';
+  }
+
+  function setPct(v){
+    pct = clamp(v);
+    fill.style.width = pct + '%';
+    handle.style.left = pct + '%';
+    stage.setAttribute('aria-valuenow', String(Math.round(pct)));
+  }
+
+  function pointerPct(clientX){
+    var r = stage.getBoundingClientRect();
+    return r.width ? ((clientX-r.left)/r.width)*100 : pct;
+  }
+
+  function updateMaps(){
+    var id = ++renderId;
+    var ds = DATASETS[dataset.value];
+    if(!ds) return;
+
+    var l = leftYear.value, r = rightYear.value;
+
+    /* Set the exact files from the supplied pics folder. */
+    leftImg.onload = function(){ if(id === renderId) layout(); };
+    rightImg.onload = function(){ if(id === renderId) layout(); };
+
+    leftImg.src = ds.file(l);
+    rightImg.src = ds.file(r);
+    leftImg.alt = ds.label + ' ' + l;
+    rightImg.alt = ds.label + ' ' + r;
+
+    setPct(50);
+    if(leftImg.complete && rightImg.complete) layout();
+  }
+
+  function down(e){
+    dragging = true;
+    setPct(pointerPct(e.clientX));
+    if(stage.setPointerCapture && e.pointerId != null){
+      try{ stage.setPointerCapture(e.pointerId); }catch(_){}
+    }
+    e.preventDefault();
+  }
+  function move(e){
+    if(!dragging) return;
+    setPct(pointerPct(e.clientX));
+    e.preventDefault();
+  }
+  function up(){
+    dragging = false;
+  }
+
+  stage.addEventListener('pointerdown', down);
+  stage.addEventListener('pointermove', move);
+  stage.addEventListener('pointerup', up);
+  stage.addEventListener('pointercancel', up);
+  stage.addEventListener('keydown', function(e){
+    var step = e.shiftKey ? 10 : 3;
+    if(e.key === 'ArrowLeft'){ setPct(pct-step); e.preventDefault(); }
+    if(e.key === 'ArrowRight'){ setPct(pct+step); e.preventDefault(); }
+    if(e.key === 'Home'){ setPct(0); e.preventDefault(); }
+    if(e.key === 'End'){ setPct(100); e.preventDefault(); }
+  });
+
+  dataset.addEventListener('change', updateMaps);
+  leftYear.addEventListener('change', updateMaps);
+  rightYear.addEventListener('change', updateMaps);
+
+  if(swap){
+    swap.addEventListener('click', function(){
+      var t = leftYear.value;
+      leftYear.value = rightYear.value;
+      rightYear.value = t;
+      updateMaps();
+    });
+  }
+
+  window.addEventListener('resize', layout);
+
+  /* Wait for BOTH real source images before calculating the canvas. */
+  if(leftImg.complete && rightImg.complete) layout();
+  else {
+    leftImg.addEventListener('load', layout);
+    rightImg.addEventListener('load', layout);
+  }
+
+  updateMaps();
+})();
+</script>
+</div></article><div class="mx-auto grid max-w-3xl grid-cols-1 gap-4 px-6 pb-16 sm:grid-cols-2"><a href="climate-drivers.html" style="border-color:rgba(11,29,42,0.12);background-color:#fff" class="group rounded-lg border p-5 transition-all hover:-translate-y-0.5 hover:shadow-md"><span class="block text-[10px] uppercase tracking-[0.3em]" style="color:var(--color-thesis-muted)">← Previous<!-- --> · 07</span><span class="font-display mt-1 block text-lg" style="color:var(--color-thesis-bg)">Climatic Drivers</span></a><a href="discussion.html" style="border-color:rgba(11,29,42,0.12);background-color:#fff" class="group rounded-lg border p-5 text-right transition-all hover:-translate-y-0.5 hover:shadow-md"><span class="block text-[10px] uppercase tracking-[0.3em]" style="color:var(--color-thesis-muted)">Next<!-- --> →</span><span class="font-display mt-1 block text-lg" style="color:var(--color-thesis-bg)">Discussion</span></a></div><footer class="px-6 py-12 text-center text-xs uppercase tracking-[0.25em]" style="background-color:var(--color-thesis-bg);color:var(--color-thesis-ice)"><div class="mx-auto mb-8 flex max-w-4xl flex-wrap items-center justify-center gap-6 rounded-md border px-6 py-4 sm:gap-10" style="background-color:var(--color-thesis-bg);border-color:var(--color-thesis-line)"><img src="pics/palacky_white.jpeg" alt="Palacký University Olomouc" class="h-10 w-auto object-contain sm:h-12" loading="lazy"><img src="pics/plus_logo.jpeg" alt="Paris Lodron University Salzburg" class="h-10 w-auto object-contain sm:h-12" loading="lazy"><img src="pics/copernicus_white.jpeg" alt="Copernicus Master in Digital Earth" class="h-10 w-auto object-contain sm:h-12" loading="lazy"><img src="pics/eu_logo.jpeg" alt="Co-funded by the European Union" class="h-10 w-auto object-contain sm:h-12" loading="lazy"></div><p>© 2026 Syeda Noor ul Saba Bukhari — All rights reserved</p><p class="mt-2 opacity-70">Erasmus Mundus Joint Master Degree · Copernicus Master in Digital Earth</p><p class="mt-2 opacity-70">Palacký University Olomouc &amp; Paris Lodron University Salzburg</p></footer></div><!--/$--></body></html>
