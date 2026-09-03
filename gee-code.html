@@ -1,0 +1,411 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>GEE Code — Hohe Tauern Snow Thesis</title><meta name="author" content="Syeda Noor ul Saba Bukhari"><meta property="og:type" content="website"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content="@Lovable"><meta name="description" content="Google Earth Engine JavaScript source code: PCA snow index and rule-based wet/dry snow classification."><meta property="og:title" content="GEE Code — Hohe Tauern Snow Thesis"><meta property="og:description" content="Reproducible GEE scripts for multi-sensor snow analysis."><link rel="icon" href="pics/favicon.ico" type="image/x-icon"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous"><link rel="stylesheet" href="css/styles.css"></head><body><div aria-hidden="true" style="position:fixed;top:0;left:0;height:3px;width:0%;background:linear-gradient(90deg, var(--color-thesis-accent-glow), var(--color-thesis-accent), var(--color-thesis-aurora));z-index:60;box-shadow:0 0 12px rgba(125,227,240,0.6);transition:width 80ms linear"></div><nav class="sticky top-0 z-40 border-b backdrop-blur-md" style="background-color:rgba(255,255,255,0.88);border-color:rgba(11,29,42,0.08);color:var(--color-thesis-ink)"><div class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3"><a href="index.html" class="font-display text-base tracking-tight"><span style="color:var(--color-thesis-accent)">❄</span> <span class="opacity-90">Hohe Tauern</span><span class="opacity-50"> · Snow Thesis</span></a><div class="hidden flex-wrap justify-end gap-1 lg:flex"><a href="introduction.html" style="opacity:0.75" class="rounded-full px-3 py-1.5 text-[10px] uppercase tracking-[0.2em] transition-opacity hover:opacity-100">Introduction</a><a href="objectives.html" style="opacity:0.75" class="rounded-full px-3 py-1.5 text-[10px] uppercase tracking-[0.2em] transition-opacity hover:opacity-100">Objectives</a><a href="state-of-art.html" style="opacity:0.75" class="rounded-full px-3 py-1.5 text-[10px] uppercase tracking-[0.2em] transition-opacity hover:opacity-100">State of Art</a><a href="study-area.html" style="opacity:0.75" class="rounded-full px-3 py-1.5 text-[10px] uppercase tracking-[0.2em] transition-opacity hover:opacity-100">Study Area</a><a href="methodology.html" style="opacity:0.75" class="rounded-full px-3 py-1.5 text-[10px] uppercase tracking-[0.2em] transition-opacity hover:opacity-100">Methodology</a><a href="results.html" style="opacity:0.75" class="rounded-full px-3 py-1.5 text-[10px] uppercase tracking-[0.2em] transition-opacity hover:opacity-100">Results</a><a href="climate-drivers.html" style="opacity:0.75" class="rounded-full px-3 py-1.5 text-[10px] uppercase tracking-[0.2em] transition-opacity hover:opacity-100">Climatic Drivers</a><a href="year-compare.html" style="opacity:0.75" class="rounded-full px-3 py-1.5 text-[10px] uppercase tracking-[0.2em] transition-opacity hover:opacity-100">Multi-Year Snow Variability Tool</a><a href="discussion.html" style="opacity:0.75" class="rounded-full px-3 py-1.5 text-[10px] uppercase tracking-[0.2em] transition-opacity hover:opacity-100">Discussion</a><a href="conclusion.html" style="opacity:0.75" class="rounded-full px-3 py-1.5 text-[10px] uppercase tracking-[0.2em] transition-opacity hover:opacity-100">Conclusion</a><a style="opacity:1;background-color:var(--color-thesis-accent);color:#fff" href="gee-code.html" class="rounded-full px-3 py-1.5 text-[10px] uppercase tracking-[0.2em] transition-opacity hover:opacity-100" data-status="active" aria-current="page">GEE Code</a><a href="references.html" style="opacity:0.75" class="rounded-full px-3 py-1.5 text-[10px] uppercase tracking-[0.2em] transition-opacity hover:opacity-100">References</a></div><details class="relative lg:hidden"><summary class="cursor-pointer list-none rounded-md border px-3 py-1.5 text-[10px] uppercase tracking-[0.2em]" style="border-color:currentColor">Menu</summary><div class="absolute right-0 top-full z-50 mt-2 flex w-56 flex-col rounded-md border bg-white p-2 shadow-xl" style="color:var(--color-thesis-ink);border-color:rgba(11,29,42,0.1)"><a href="introduction.html" class="rounded px-3 py-1.5 text-xs uppercase tracking-[0.2em] hover:bg-slate-100">Introduction</a><a href="objectives.html" class="rounded px-3 py-1.5 text-xs uppercase tracking-[0.2em] hover:bg-slate-100">Objectives</a><a href="state-of-art.html" class="rounded px-3 py-1.5 text-xs uppercase tracking-[0.2em] hover:bg-slate-100">State of Art</a><a href="study-area.html" class="rounded px-3 py-1.5 text-xs uppercase tracking-[0.2em] hover:bg-slate-100">Study Area</a><a href="methodology.html" class="rounded px-3 py-1.5 text-xs uppercase tracking-[0.2em] hover:bg-slate-100">Methodology</a><a href="results.html" class="rounded px-3 py-1.5 text-xs uppercase tracking-[0.2em] hover:bg-slate-100">Results</a><a href="climate-drivers.html" class="rounded px-3 py-1.5 text-xs uppercase tracking-[0.2em] hover:bg-slate-100">Climatic Drivers</a><a href="year-compare.html" class="rounded px-3 py-1.5 text-xs uppercase tracking-[0.2em] hover:bg-slate-100">Multi-Year Snow Variability Tool</a><a href="discussion.html" class="rounded px-3 py-1.5 text-xs uppercase tracking-[0.2em] hover:bg-slate-100">Discussion</a><a href="conclusion.html" class="rounded px-3 py-1.5 text-xs uppercase tracking-[0.2em] hover:bg-slate-100">Conclusion</a><a class="rounded px-3 py-1.5 text-xs uppercase tracking-[0.2em] hover:bg-slate-100 active" href="gee-code.html" data-status="active" aria-current="page">GEE Code</a><a href="references.html" class="rounded px-3 py-1.5 text-xs uppercase tracking-[0.2em] hover:bg-slate-100">References</a></div></details></div></nav><!--$--><div style="background-color:var(--color-thesis-light);color:var(--color-thesis-ink)"><header class="thesis-aurora border-b" style="border-color:rgba(11,29,42,0.08);color:var(--color-thesis-ice)"><div aria-hidden="true" class="thesis-snow"><span class="thesis-snow-flake" style="left:0%;animation-delay:0s;animation-duration:9s;font-size:8px;opacity:0.35">❄</span><span class="thesis-snow-flake" style="left:4.17%;animation-delay:-1.6s;animation-duration:10s;font-size:11px;opacity:0.5">❄</span><span class="thesis-snow-flake" style="left:8.34%;animation-delay:-3.2s;animation-duration:11s;font-size:14px;opacity:0.6499999999999999">❄</span><span class="thesis-snow-flake" style="left:12.51%;animation-delay:-4.800000000000001s;animation-duration:12s;font-size:17px;opacity:0.7999999999999999">❄</span><span class="thesis-snow-flake" style="left:16.68%;animation-delay:-6.4s;animation-duration:13s;font-size:20px;opacity:0.35">❄</span><span class="thesis-snow-flake" style="left:20.85%;animation-delay:-8s;animation-duration:14s;font-size:8px;opacity:0.5">❄</span><span class="thesis-snow-flake" style="left:25.02%;animation-delay:-9.600000000000001s;animation-duration:9s;font-size:11px;opacity:0.6499999999999999">❄</span><span class="thesis-snow-flake" style="left:29.189999999999998%;animation-delay:-11.200000000000001s;animation-duration:10s;font-size:14px;opacity:0.7999999999999999">❄</span><span class="thesis-snow-flake" style="left:33.36%;animation-delay:0s;animation-duration:11s;font-size:17px;opacity:0.35">❄</span><span class="thesis-snow-flake" style="left:37.53%;animation-delay:-1.6s;animation-duration:12s;font-size:20px;opacity:0.5">❄</span><span class="thesis-snow-flake" style="left:41.7%;animation-delay:-3.2s;animation-duration:13s;font-size:8px;opacity:0.6499999999999999">❄</span><span class="thesis-snow-flake" style="left:45.87%;animation-delay:-4.800000000000001s;animation-duration:14s;font-size:11px;opacity:0.7999999999999999">❄</span><span class="thesis-snow-flake" style="left:50.04%;animation-delay:-6.4s;animation-duration:9s;font-size:14px;opacity:0.35">❄</span><span class="thesis-snow-flake" style="left:54.21%;animation-delay:-8s;animation-duration:10s;font-size:17px;opacity:0.5">❄</span><span class="thesis-snow-flake" style="left:58.379999999999995%;animation-delay:-9.600000000000001s;animation-duration:11s;font-size:20px;opacity:0.6499999999999999">❄</span><span class="thesis-snow-flake" style="left:62.55%;animation-delay:-11.200000000000001s;animation-duration:12s;font-size:8px;opacity:0.7999999999999999">❄</span><span class="thesis-snow-flake" style="left:66.72%;animation-delay:0s;animation-duration:13s;font-size:11px;opacity:0.35">❄</span><span class="thesis-snow-flake" style="left:70.89%;animation-delay:-1.6s;animation-duration:14s;font-size:14px;opacity:0.5">❄</span><span class="thesis-snow-flake" style="left:75.06%;animation-delay:-3.2s;animation-duration:9s;font-size:17px;opacity:0.6499999999999999">❄</span><span class="thesis-snow-flake" style="left:79.23%;animation-delay:-4.800000000000001s;animation-duration:10s;font-size:20px;opacity:0.7999999999999999">❄</span><span class="thesis-snow-flake" style="left:83.4%;animation-delay:-6.4s;animation-duration:11s;font-size:8px;opacity:0.35">❄</span><span class="thesis-snow-flake" style="left:87.57%;animation-delay:-8s;animation-duration:12s;font-size:11px;opacity:0.5">❄</span><span class="thesis-snow-flake" style="left:91.74%;animation-delay:-9.600000000000001s;animation-duration:13s;font-size:14px;opacity:0.6499999999999999">❄</span><span class="thesis-snow-flake" style="left:95.91%;animation-delay:-11.200000000000001s;animation-duration:14s;font-size:17px;opacity:0.7999999999999999">❄</span></div><div class="mx-auto max-w-3xl px-6 py-16 md:py-24"><p class="text-xs uppercase tracking-[0.4em]" style="color:var(--color-thesis-accent-glow)">Chapter <!-- -->10</p><h1 class="font-display mt-4 text-4xl leading-[1.05] md:text-6xl">Google Earth Engine Code</h1><p class="mt-6 max-w-2xl text-base opacity-85 md:text-lg">The two JavaScript scripts used in Google Earth Engine to (1) fuse Sentinel-1 and Sentinel-2 with PCA into an NDSI-like snow index, and (2) classify snow into dry, wet and non-snow classes with rule-based thresholds.</p></div></header><article class="mx-auto max-w-3xl px-6 py-16 md:py-20"><div class="thesis-prose space-y-5 text-base leading-[1.75] md:text-lg"><p>Paste each script into the<!-- --> <a href="https://code.earthengine.google.com/" target="_blank" rel="noreferrer" style="color:var(--color-thesis-accent)">Google Earth Engine Code Editor</a>, import your area-of-interest as a table asset named <code>table</code>, and run.</p><h2 class="font-display mt-12 mb-3 text-2xl md:text-3xl" style="color:var(--color-thesis-bg)">1. PCA-based Snow Index (Sentinel-1 + Sentinel-2)</h2><p>Builds a 10-band optical + SAR stack, runs PCA and selects the component with the highest |correlation| to NDSI as an NDSI-like snow index. Also exports snow-index and wet/dry class rasters to Drive.</p><div class="my-6 overflow-hidden rounded-xl border shadow-sm" style="border-color:rgba(11,29,42,0.15)"><div class="flex items-center justify-between border-b px-4 py-2 text-xs" style="border-color:rgba(11,29,42,0.1);background-color:#f0f4f8"><span class="font-mono" style="color:var(--color-thesis-muted)">S1_S2_PCA_Snow.js</span><div class="flex items-center gap-2"><a href="data:text/javascript;charset=utf-8,%2F%2F%20%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%0D%0A%2F%2F%20PCA%20SNOW%20INDEX%20-%20NDSI-LIKE%20VISUALIZATION%20(FINAL%20FIX)%0D%0A%2F%2F%20Resolves%3A%20Map.addLayer%20encoding%20errors%20%26%20server%2Fclient%20type%20mismatches%0D%0A%2F%2F%20%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%0D%0A%0D%0Avar%20aoi%20%3D%20table%3B%0D%0AMap.centerObject(aoi%2C%2010)%3B%0D%0AMap.addLayer(aoi.style(%7Bcolor%3A%20%22red%22%2C%20fillColor%3A%20%2200000000%22%7D)%2C%20%7B%7D%2C%20%22Study%20Area%22)%3B%0D%0A%0D%0A%2F%2F%20%3D%3D%3D%3D%3D%201.%20SETUP%20%3D%3D%3D%3D%3D%0D%0Avar%20start%20%3D%20'2022-11-01'%3B%0D%0Avar%20end%20%20%20%3D%20'2023-03-30'%3B%0D%0Avar%20scale%20%3D%2020%3B%0D%0A%0D%0A%2F%2F%20%3D%3D%3D%3D%3D%202.%20SENTINEL-2%20%3D%3D%3D%3D%3D%0D%0Avar%20s2%20%3D%20ee.ImageCollection(%22COPERNICUS%2FS2_SR_HARMONIZED%22)%0D%0A%20%20.filterBounds(aoi)%0D%0A%20%20.filterDate(start%2C%20end)%0D%0A%20%20.filter(ee.Filter.lt('CLOUDY_PIXEL_PERCENTAGE'%2C%2050))%3B%0D%0A%0D%0Afunction%20prepS2(img)%20%7B%0D%0A%20%20var%20refl%20%3D%20img.select(%5B'B2'%2C'B3'%2C'B4'%2C'B8'%2C'B11'%5D).divide(10000)%3B%0D%0A%20%20var%20ndsi%20%3D%20refl.normalizedDifference(%5B'B3'%2C%20'B11'%5D).rename('NDSI')%3B%0D%0A%20%20var%20ndvi%20%3D%20refl.normalizedDifference(%5B'B8'%2C%20'B4'%5D).rename('NDVI')%3B%0D%0A%20%20var%20ndwi%20%3D%20refl.normalizedDifference(%5B'B3'%2C%20'B8'%5D).rename('NDWI')%3B%0D%0A%20%20return%20refl.addBands(%5Bndsi%2C%20ndvi%2C%20ndwi%5D).copyProperties(img%2C%20img.propertyNames())%3B%0D%0A%7D%0D%0A%0D%0Avar%20s2_prep%20%3D%20s2.map(prepS2)%3B%0D%0Avar%20s2_comp%20%3D%20s2_prep.mean().clip(aoi)%3B%0D%0AMap.addLayer(s2_comp.select(%5B'B4'%2C%20'B3'%2C%20'B2'%5D)%2C%20%7Bmin%3A0%2C%20max%3A0.3%7D%2C%20%22Sentinel-2%20RGB%22)%3B%0D%0A%0D%0A%2F%2F%20%3D%3D%3D%3D%3D%203.%20SENTINEL-1%20%3D%3D%3D%3D%3D%0D%0Avar%20s1%20%3D%20ee.ImageCollection('COPERNICUS%2FS1_GRD')%0D%0A%20%20.filterBounds(aoi)%0D%0A%20%20.filterDate(start%2C%20end)%0D%0A%20%20.filter(ee.Filter.eq('instrumentMode'%2C%20'IW'))%0D%0A%20%20.select(%5B'VV'%2C'VH'%5D)%3B%0D%0A%0D%0Afunction%20toDB_safe(img)%20%7B%0D%0A%20%20var%20vv%20%3D%20img.select('VV').where(img.select('VV').lte(0)%2C%201e-6)%3B%0D%0A%20%20var%20vh%20%3D%20img.select('VH').where(img.select('VH').lte(0)%2C%201e-6)%3B%0D%0A%20%20return%20ee.Image(%5B%0D%0A%20%20%20%20vv.log10().multiply(10).rename('VV_dB')%2C%0D%0A%20%20%20%20vh.log10().multiply(10).rename('VH_dB')%0D%0A%20%20%5D).copyProperties(img%2C%20img.propertyNames())%3B%0D%0A%7D%0D%0A%0D%0Avar%20s1_db%20%3D%20s1.map(toDB_safe)%3B%0D%0Avar%20s1_comp%20%3D%20s1_db.mean().clip(aoi)%3B%0D%0A%0D%0A%2F%2F%20%3D%3D%3D%3D%3D%204.%20STACK%20BANDS%20%3D%3D%3D%3D%3D%0D%0Avar%20stack%20%3D%20s2_comp.select(%5B'B2'%2C'B3'%2C'B4'%2C'B8'%2C'B11'%2C'NDSI'%2C'NDVI'%2C'NDWI'%5D)%0D%0A%20%20.addBands(s1_comp.select(%5B'VV_dB'%2C'VH_dB'%5D))%0D%0A%20%20.clip(aoi)%3B%0D%0A%0D%0Avar%20nBands%20%3D%20stack.bandNames().length()%3B%0D%0A%0D%0A%2F%2F%20%3D%3D%3D%3D%3D%205.%20PCA%20FUNCTION%20(OFFICIAL%20GEE%20PATTERN)%20%3D%3D%3D%3D%3D%0D%0Afunction%20getPrincipalComponents(image%2C%20scale%2C%20region)%20%7B%0D%0A%20%20var%20bandNames%20%3D%20image.bandNames()%3B%0D%0A%20%20%0D%0A%20%20var%20means%20%3D%20image.reduceRegion(%7B%0D%0A%20%20%20%20reducer%3A%20ee.Reducer.mean()%2C%0D%0A%20%20%20%20geometry%3A%20region%2C%0D%0A%20%20%20%20scale%3A%20scale%2C%0D%0A%20%20%20%20maxPixels%3A%201e9%2C%0D%0A%20%20%20%20bestEffort%3A%20true%0D%0A%20%20%7D)%3B%0D%0A%20%20var%20centered%20%3D%20image.subtract(ee.Image.constant(bandNames.map(function(b)%20%7B%0D%0A%20%20%20%20return%20ee.Number(means.get(b))%3B%0D%0A%20%20%7D)).rename(bandNames))%3B%0D%0A%20%20%0D%0A%20%20var%20arrayImage%20%3D%20centered.toArray()%3B%0D%0A%20%20var%20arrayImage2D%20%3D%20arrayImage.toArray(1)%3B%0D%0A%20%20%0D%0A%20%20var%20covar%20%3D%20arrayImage.reduceRegion(%7B%0D%0A%20%20%20%20reducer%3A%20ee.Reducer.centeredCovariance()%2C%0D%0A%20%20%20%20geometry%3A%20region%2C%0D%0A%20%20%20%20scale%3A%20scale%2C%0D%0A%20%20%20%20maxPixels%3A%201e9%2C%0D%0A%20%20%20%20bestEffort%3A%20true%0D%0A%20%20%7D)%3B%0D%0A%20%20var%20covarArray%20%3D%20ee.Array(covar.get('array'))%3B%0D%0A%20%20var%20eigens%20%3D%20covarArray.eigen()%3B%0D%0A%20%20var%20eigenVectors%20%3D%20eigens.slice(1%2C%201)%3B%0D%0A%20%20%0D%0A%20%20%2F%2F%20%5Bbands%20%C3%97%20components%5D%20*%20%5Bbands%20%C3%97%201%5D%20%3D%20%5Bcomponents%20%C3%97%201%5D%0D%0A%20%20return%20%7B%0D%0A%20%20%20%20pcImage%3A%20ee.Image(eigenVectors)%0D%0A%20%20%20%20%20%20.matrixMultiply(arrayImage2D)%0D%0A%20%20%20%20%20%20.arrayProject(%5B0%5D)%0D%0A%20%20%20%20%20%20.arrayFlatten(%5Bee.List.sequence(1%2C%20nBands).map(function(i)%20%7B%0D%0A%20%20%20%20%20%20%20%20return%20ee.String('pc').cat(ee.Number(i).format('%25d'))%3B%0D%0A%20%20%20%20%20%20%7D)%5D)%0D%0A%20%20%20%20%20%20.clip(region)%2C%0D%0A%20%20%20%20eigenVectors%3A%20eigenVectors%0D%0A%20%20%7D%3B%0D%0A%7D%0D%0A%0D%0A%2F%2F%20%3D%3D%3D%3D%3D%206.%20RUN%20PCA%20%3D%3D%3D%3D%3D%0D%0Avar%20pcaResult%20%3D%20getPrincipalComponents(stack%2C%20scale%2C%20aoi)%3B%0D%0Avar%20pcImage%20%3D%20pcaResult.pcImage%3B%0D%0A%0D%0A%2F%2F%20%3D%3D%3D%3D%3D%207.%20FIND%20BEST%20SNOW%20PC%20%3D%3D%3D%3D%3D%0D%0Avar%20ndsi%20%3D%20s2_comp.select('NDSI')%3B%0D%0Avar%20pcNames%20%3D%20ee.List.sequence(1%2C%20nBands).map(function(i)%20%7B%0D%0A%20%20return%20ee.String('pc').cat(ee.Number(i).format('%25d'))%3B%0D%0A%7D)%3B%0D%0A%0D%0Avar%20corrValues%20%3D%20pcNames.map(function(name)%20%7B%0D%0A%20%20var%20r%20%3D%20pcImage.select(%5Bname%5D).addBands(ndsi).reduceRegion(%7B%0D%0A%20%20%20%20reducer%3A%20ee.Reducer.pearsonsCorrelation()%2C%0D%0A%20%20%20%20geometry%3A%20aoi%2C%0D%0A%20%20%20%20scale%3A%20scale%2C%0D%0A%20%20%20%20maxPixels%3A%201e9%2C%0D%0A%20%20%20%20bestEffort%3A%20true%0D%0A%20%20%7D).get('correlation')%3B%0D%0A%20%20return%20ee.Algorithms.If(r%2C%20ee.Number(r).abs()%2C%20ee.Number(0))%3B%0D%0A%7D)%3B%0D%0A%0D%0Avar%20maxCorr%20%3D%20ee.Number(corrValues.reduce(ee.Reducer.max()))%3B%0D%0Avar%20bestIdx%20%3D%20corrValues.indexOf(maxCorr)%3B%0D%0Avar%20bestPCName%20%3D%20ee.String(pcNames.get(bestIdx))%3B%0D%0A%0D%0Aprint('%F0%9F%8E%AF%20Best%20snow-correlated%20PC%3A'%2C%20bestPCName)%3B%0D%0Aprint('%F0%9F%93%8A%20Max%20%7Ccorrelation%7C%20with%20NDSI%3A'%2C%20maxCorr.getInfo())%3B%0D%0A%0D%0A%2F%2F%20%3D%3D%3D%3D%3D%208.%20CREATE%20%26%20FLIP%20PCA%20SNOW%20INDEX%20%3D%3D%3D%3D%3D%0D%0Avar%20pcaSnowIndex%20%3D%20pcImage.select(%5BbestPCName%5D).rename('PCA_Snow_Index')%3B%0D%0A%0D%0A%2F%2F%20Get%20raw%20correlation%20as%20JS%20number%20for%20safe%20client-side%20branching%0D%0Avar%20rawCorrVal%20%3D%20ndsi.addBands(pcImage.select(%5BbestPCName%5D)).reduceRegion(%7B%0D%0A%20%20reducer%3A%20ee.Reducer.pearsonsCorrelation()%2C%0D%0A%20%20geometry%3A%20aoi%2C%0D%0A%20%20scale%3A%20scale%2C%0D%0A%20%20maxPixels%3A%201e9%2C%0D%0A%20%20bestEffort%3A%20true%0D%0A%7D).get('correlation').getInfo()%3B%0D%0A%0D%0A%2F%2F%20FIX%3A%20Use%20client-side%20if%2Felse%20to%20avoid%20ee.Algorithms.If%20encoding%20issues%0D%0Aif%20(rawCorrVal%20%3C%200)%20%7B%0D%0A%20%20pcaSnowIndex%20%3D%20pcaSnowIndex.multiply(-1).rename('PCA_Snow_Index')%3B%0D%0A%7D%0D%0A%0D%0A%2F%2F%20%3D%3D%3D%3D%3D%209.%20AUTO-VISUALIZATION%20(CLIENT-SIDE%20NUMBERS)%20%3D%3D%3D%3D%3D%0D%0Avar%20stats%20%3D%20pcaSnowIndex.reduceRegion(%7B%0D%0A%20%20reducer%3A%20ee.Reducer.percentile(%5B1%2C%2099%5D)%2C%0D%0A%20%20geometry%3A%20aoi%2C%0D%0A%20%20scale%3A%20scale%2C%0D%0A%20%20maxPixels%3A%201e9%2C%0D%0A%20%20bestEffort%3A%20true%0D%0A%7D)%3B%0D%0A%0D%0A%2F%2F%20CRITICAL%3A%20Convert%20ee.Number%20to%20JS%20numbers%20for%20Map.addLayer%0D%0Avar%20p1%20%3D%20ee.Number(stats.get('PCA_Snow_Index_p1')).getInfo()%20%7C%7C%20-1%3B%0D%0Avar%20p99%20%3D%20ee.Number(stats.get('PCA_Snow_Index_p99')).getInfo()%20%7C%7C%201%3B%0D%0A%0D%0Avar%20snowVis%20%3D%20%7B%0D%0A%20%20min%3A%20p1%2C%0D%0A%20%20max%3A%20p99%2C%0D%0A%20%20palette%3A%20%5B'brown'%2C%20'orange'%2C%20'yellow'%2C%20'white'%2C%20'cyan'%2C%20'blue'%5D%0D%0A%7D%3B%0D%0A%0D%0A%2F%2F%20%3D%3D%3D%3D%3D%2010.%20DISPLAY%20%3D%3D%3D%3D%3D%0D%0AMap.addLayer(pcaSnowIndex%2C%20snowVis%2C%20'%F0%9F%8C%A8%EF%B8%8F%20PCA%20Snow%20Index%20(NDSI-like)')%3B%0D%0A%0D%0AMap.addLayer(ndsi%2C%20%7Bmin%3A%20-0.2%2C%20max%3A%201.0%2C%20palette%3A%20%5B'brown'%2C%20'white'%2C%20'blue'%5D%7D%2C%20'%F0%9F%94%8D%20Traditional%20NDSI')%3B%0D%0A%0D%0A%2F%2F%20Binary%20mask%0D%0Avar%20meanStd%20%3D%20pcaSnowIndex.reduceRegion(%7B%0D%0A%20%20reducer%3A%20ee.Reducer.mean().combine(ee.Reducer.stdDev()%2C%20null%2C%20true)%2C%0D%0A%20%20geometry%3A%20aoi%2C%0D%0A%20%20scale%3A%20scale%2C%0D%0A%20%20maxPixels%3A%201e9%2C%0D%0A%20%20bestEffort%3A%20true%0D%0A%7D)%3B%0D%0Avar%20threshold%20%3D%20ee.Number(meanStd.get('PCA_Snow_Index_mean'))%0D%0A%20%20.add(ee.Number(meanStd.get('PCA_Snow_Index_stdDev')).multiply(0.5))%3B%0D%0Avar%20snowMask%20%3D%20pcaSnowIndex.gt(threshold)%3B%0D%0AMap.addLayer(snowMask.updateMask(snowMask)%2C%20%7Bpalette%3A%20'blue'%7D%2C%20'%E2%9D%84%EF%B8%8F%20Snow%20Cover')%3B%0D%0A%0D%0A%2F%2F%20%3D%3D%3D%3D%3D%2011.%20WET%2FDRY%20CLASSIFICATION%20%3D%3D%3D%3D%3D%0D%0Avar%20wetIndicators%20%3D%20ee.Image.cat(%5B%0D%0A%20%20s2_comp.select('NDWI').gt(0.05)%2C%0D%0A%20%20s1_comp.select('VV_dB').lt(-10)%2C%0D%0A%20%20s1_comp.select('VH_dB').divide(s1_comp.select('VV_dB').add(0.001)).gt(0.4)%0D%0A%5D).reduce(ee.Reducer.sum())%3B%0D%0A%0D%0Avar%20snowClass%20%3D%20ee.Image(1)%0D%0A%20%20.where(snowMask.and(wetIndicators.gte(2))%2C%202)%0D%0A%20%20.where(snowMask.not()%2C%200)%0D%0A%20%20.rename('Snow_Class')%3B%0D%0A%0D%0AMap.addLayer(snowClass%2C%20%7Bmin%3A0%2C%20max%3A2%2C%20palette%3A%5B'gray'%2C'white'%2C'cyan'%5D%7D%2C%20'%F0%9F%8C%A7%EF%B8%8F%20Wet%2FDry%20Snow')%3B%0D%0A%0D%0A%2F%2F%20%3D%3D%3D%3D%3D%2012.%20EXPORT%20%3D%3D%3D%3D%3D%0D%0AExport.image.toDrive(%7B%0D%0A%20%20image%3A%20pcaSnowIndex%2C%0D%0A%20%20description%3A%20'PCA_Snow_Index_'%20%2B%20start.replace(%2F-%2Fg%2C%20'')%2C%0D%0A%20%20folder%3A%20%22Hohe-Tauren%20Snow%20Study%22%2C%0D%0A%20%20region%3A%20aoi%2C%0D%0A%20%20scale%3A%2010%2C%0D%0A%20%20crs%3A%20%22EPSG%3A4326%22%2C%0D%0A%20%20maxPixels%3A%201e13%2C%0D%0A%20%20fileFormat%3A%20'GeoTIFF'%0D%0A%7D)%3B%0D%0A%0D%0AExport.image.toDrive(%7B%0D%0A%20%20image%3A%20snowClass%2C%0D%0A%20%20description%3A%20'Snow_Class_'%20%2B%20start.replace(%2F-%2Fg%2C%20'')%2C%0D%0A%20%20folder%3A%20%22Hohe-Tauren%20Snow%20Study%22%2C%0D%0A%20%20region%3A%20aoi%2C%0D%0A%20%20scale%3A%2010%2C%0D%0A%20%20crs%3A%20%22EPSG%3A4326%22%2C%0D%0A%20%20maxPixels%3A%201e13%2C%0D%0A%20%20fileFormat%3A%20'GeoTIFF'%0D%0A%7D)%3B%0D%0A%0D%0A%2F%2F%20%3D%3D%3D%3D%3D%2013.%20LEGEND%20%3D%3D%3D%3D%3D%0D%0Avar%20legend%20%3D%20ui.Panel(%7Bstyle%3A%20%7Bposition%3A%20'bottom-left'%2C%20padding%3A%20'8px%2015px'%7D%7D)%3B%0D%0Alegend.add(ui.Label('%F0%9F%8C%A8%EF%B8%8F%20PCA%20Snow%20Index'%2C%20%7BfontWeight%3A%20'bold'%7D))%3B%0D%0Alegend.add(ui.Thumbnail(%7B%0D%0A%20%20image%3A%20ee.Image.pixelLonLat().select(0)%2C%0D%0A%20%20params%3A%20%7B%0D%0A%20%20%20%20bbox%3A%20%5B0%2C0%2C1%2C0.1%5D%2C%20dimensions%3A%20'200x30'%2C%20format%3A%20'png'%2C%20%0D%0A%20%20%20%20min%3A%20p1%2C%20max%3A%20p99%2C%20palette%3A%20snowVis.palette%0D%0A%20%20%7D%2C%0D%0A%20%20style%3A%20%7Bstretch%3A%20'horizontal'%7D%0D%0A%7D))%3B%0D%0AMap.add(legend)%3B" download="S1_S2_PCA_Snow.js" class="rounded border px-2 py-1 text-[10px] uppercase tracking-widest hover:bg-white" style="border-color:rgba(11,29,42,0.2)">Download</a><button class="rounded px-2 py-1 text-[10px] uppercase tracking-widest text-white" style="background-color:var(--color-thesis-accent)">Copy</button></div></div><pre class="max-h-[520px] overflow-auto p-4 text-[12px] leading-[1.55]" style="background-color:#0a1929;color:#dce7f0"><code class="font-mono">// ============================================================================
+// PCA SNOW INDEX - NDSI-LIKE VISUALIZATION (FINAL FIX)
+// Resolves: Map.addLayer encoding errors &amp; server/client type mismatches
+// ============================================================================
+
+var aoi = table;
+Map.centerObject(aoi, 10);
+Map.addLayer(aoi.style({color: "red", fillColor: "00000000"}), {}, "Study Area");
+
+// ===== 1. SETUP =====
+var start = '2022-11-01';
+var end   = '2023-03-30';
+var scale = 20;
+
+// ===== 2. SENTINEL-2 =====
+var s2 = ee.ImageCollection("COPERNICUS/S2_SR_HARMONIZED")
+  .filterBounds(aoi)
+  .filterDate(start, end)
+  .filter(ee.Filter.lt('CLOUDY_PIXEL_PERCENTAGE', 50));
+
+function prepS2(img) {
+  var refl = img.select(['B2','B3','B4','B8','B11']).divide(10000);
+  var ndsi = refl.normalizedDifference(['B3', 'B11']).rename('NDSI');
+  var ndvi = refl.normalizedDifference(['B8', 'B4']).rename('NDVI');
+  var ndwi = refl.normalizedDifference(['B3', 'B8']).rename('NDWI');
+  return refl.addBands([ndsi, ndvi, ndwi]).copyProperties(img, img.propertyNames());
+}
+
+var s2_prep = s2.map(prepS2);
+var s2_comp = s2_prep.mean().clip(aoi);
+Map.addLayer(s2_comp.select(['B4', 'B3', 'B2']), {min:0, max:0.3}, "Sentinel-2 RGB");
+
+// ===== 3. SENTINEL-1 =====
+var s1 = ee.ImageCollection('COPERNICUS/S1_GRD')
+  .filterBounds(aoi)
+  .filterDate(start, end)
+  .filter(ee.Filter.eq('instrumentMode', 'IW'))
+  .select(['VV','VH']);
+
+function toDB_safe(img) {
+  var vv = img.select('VV').where(img.select('VV').lte(0), 1e-6);
+  var vh = img.select('VH').where(img.select('VH').lte(0), 1e-6);
+  return ee.Image([
+    vv.log10().multiply(10).rename('VV_dB'),
+    vh.log10().multiply(10).rename('VH_dB')
+  ]).copyProperties(img, img.propertyNames());
+}
+
+var s1_db = s1.map(toDB_safe);
+var s1_comp = s1_db.mean().clip(aoi);
+
+// ===== 4. STACK BANDS =====
+var stack = s2_comp.select(['B2','B3','B4','B8','B11','NDSI','NDVI','NDWI'])
+  .addBands(s1_comp.select(['VV_dB','VH_dB']))
+  .clip(aoi);
+
+var nBands = stack.bandNames().length();
+
+// ===== 5. PCA FUNCTION (OFFICIAL GEE PATTERN) =====
+function getPrincipalComponents(image, scale, region) {
+  var bandNames = image.bandNames();
+  
+  var means = image.reduceRegion({
+    reducer: ee.Reducer.mean(),
+    geometry: region,
+    scale: scale,
+    maxPixels: 1e9,
+    bestEffort: true
+  });
+  var centered = image.subtract(ee.Image.constant(bandNames.map(function(b) {
+    return ee.Number(means.get(b));
+  })).rename(bandNames));
+  
+  var arrayImage = centered.toArray();
+  var arrayImage2D = arrayImage.toArray(1);
+  
+  var covar = arrayImage.reduceRegion({
+    reducer: ee.Reducer.centeredCovariance(),
+    geometry: region,
+    scale: scale,
+    maxPixels: 1e9,
+    bestEffort: true
+  });
+  var covarArray = ee.Array(covar.get('array'));
+  var eigens = covarArray.eigen();
+  var eigenVectors = eigens.slice(1, 1);
+  
+  // [bands × components] * [bands × 1] = [components × 1]
+  return {
+    pcImage: ee.Image(eigenVectors)
+      .matrixMultiply(arrayImage2D)
+      .arrayProject([0])
+      .arrayFlatten([ee.List.sequence(1, nBands).map(function(i) {
+        return ee.String('pc').cat(ee.Number(i).format('%d'));
+      })])
+      .clip(region),
+    eigenVectors: eigenVectors
+  };
+}
+
+// ===== 6. RUN PCA =====
+var pcaResult = getPrincipalComponents(stack, scale, aoi);
+var pcImage = pcaResult.pcImage;
+
+// ===== 7. FIND BEST SNOW PC =====
+var ndsi = s2_comp.select('NDSI');
+var pcNames = ee.List.sequence(1, nBands).map(function(i) {
+  return ee.String('pc').cat(ee.Number(i).format('%d'));
+});
+
+var corrValues = pcNames.map(function(name) {
+  var r = pcImage.select([name]).addBands(ndsi).reduceRegion({
+    reducer: ee.Reducer.pearsonsCorrelation(),
+    geometry: aoi,
+    scale: scale,
+    maxPixels: 1e9,
+    bestEffort: true
+  }).get('correlation');
+  return ee.Algorithms.If(r, ee.Number(r).abs(), ee.Number(0));
+});
+
+var maxCorr = ee.Number(corrValues.reduce(ee.Reducer.max()));
+var bestIdx = corrValues.indexOf(maxCorr);
+var bestPCName = ee.String(pcNames.get(bestIdx));
+
+print('🎯 Best snow-correlated PC:', bestPCName);
+print('📊 Max |correlation| with NDSI:', maxCorr.getInfo());
+
+// ===== 8. CREATE &amp; FLIP PCA SNOW INDEX =====
+var pcaSnowIndex = pcImage.select([bestPCName]).rename('PCA_Snow_Index');
+
+// Get raw correlation as JS number for safe client-side branching
+var rawCorrVal = ndsi.addBands(pcImage.select([bestPCName])).reduceRegion({
+  reducer: ee.Reducer.pearsonsCorrelation(),
+  geometry: aoi,
+  scale: scale,
+  maxPixels: 1e9,
+  bestEffort: true
+}).get('correlation').getInfo();
+
+// FIX: Use client-side if/else to avoid ee.Algorithms.If encoding issues
+if (rawCorrVal &lt; 0) {
+  pcaSnowIndex = pcaSnowIndex.multiply(-1).rename('PCA_Snow_Index');
+}
+
+// ===== 9. AUTO-VISUALIZATION (CLIENT-SIDE NUMBERS) =====
+var stats = pcaSnowIndex.reduceRegion({
+  reducer: ee.Reducer.percentile([1, 99]),
+  geometry: aoi,
+  scale: scale,
+  maxPixels: 1e9,
+  bestEffort: true
+});
+
+// CRITICAL: Convert ee.Number to JS numbers for Map.addLayer
+var p1 = ee.Number(stats.get('PCA_Snow_Index_p1')).getInfo() || -1;
+var p99 = ee.Number(stats.get('PCA_Snow_Index_p99')).getInfo() || 1;
+
+var snowVis = {
+  min: p1,
+  max: p99,
+  palette: ['brown', 'orange', 'yellow', 'white', 'cyan', 'blue']
+};
+
+// ===== 10. DISPLAY =====
+Map.addLayer(pcaSnowIndex, snowVis, '🌨️ PCA Snow Index (NDSI-like)');
+
+Map.addLayer(ndsi, {min: -0.2, max: 1.0, palette: ['brown', 'white', 'blue']}, '🔍 Traditional NDSI');
+
+// Binary mask
+var meanStd = pcaSnowIndex.reduceRegion({
+  reducer: ee.Reducer.mean().combine(ee.Reducer.stdDev(), null, true),
+  geometry: aoi,
+  scale: scale,
+  maxPixels: 1e9,
+  bestEffort: true
+});
+var threshold = ee.Number(meanStd.get('PCA_Snow_Index_mean'))
+  .add(ee.Number(meanStd.get('PCA_Snow_Index_stdDev')).multiply(0.5));
+var snowMask = pcaSnowIndex.gt(threshold);
+Map.addLayer(snowMask.updateMask(snowMask), {palette: 'blue'}, '❄️ Snow Cover');
+
+// ===== 11. WET/DRY CLASSIFICATION =====
+var wetIndicators = ee.Image.cat([
+  s2_comp.select('NDWI').gt(0.05),
+  s1_comp.select('VV_dB').lt(-10),
+  s1_comp.select('VH_dB').divide(s1_comp.select('VV_dB').add(0.001)).gt(0.4)
+]).reduce(ee.Reducer.sum());
+
+var snowClass = ee.Image(1)
+  .where(snowMask.and(wetIndicators.gte(2)), 2)
+  .where(snowMask.not(), 0)
+  .rename('Snow_Class');
+
+Map.addLayer(snowClass, {min:0, max:2, palette:['gray','white','cyan']}, '🌧️ Wet/Dry Snow');
+
+// ===== 12. EXPORT =====
+Export.image.toDrive({
+  image: pcaSnowIndex,
+  description: 'PCA_Snow_Index_' + start.replace(/-/g, ''),
+  folder: "Hohe-Tauren Snow Study",
+  region: aoi,
+  scale: 10,
+  crs: "EPSG:4326",
+  maxPixels: 1e13,
+  fileFormat: 'GeoTIFF'
+});
+
+Export.image.toDrive({
+  image: snowClass,
+  description: 'Snow_Class_' + start.replace(/-/g, ''),
+  folder: "Hohe-Tauren Snow Study",
+  region: aoi,
+  scale: 10,
+  crs: "EPSG:4326",
+  maxPixels: 1e13,
+  fileFormat: 'GeoTIFF'
+});
+
+// ===== 13. LEGEND =====
+var legend = ui.Panel({style: {position: 'bottom-left', padding: '8px 15px'}});
+legend.add(ui.Label('🌨️ PCA Snow Index', {fontWeight: 'bold'}));
+legend.add(ui.Thumbnail({
+  image: ee.Image.pixelLonLat().select(0),
+  params: {
+    bbox: [0,0,1,0.1], dimensions: '200x30', format: 'png', 
+    min: p1, max: p99, palette: snowVis.palette
+  },
+  style: {stretch: 'horizontal'}
+}));
+Map.add(legend);</code></pre></div><h2 class="font-display mt-12 mb-3 text-2xl md:text-3xl" style="color:var(--color-thesis-bg)">2. Rule-based Wet vs. Dry Snow Classification</h2><p>Uses NDSI ≥ 0.4 as a snow mask, then classifies snow pixels as wet where either <code>VV &lt; −11 dB</code> (absolute rule) or <code>ΔVV &lt; −2.0 dB</code> (change rule) hold, and dry otherwise.</p><div class="my-6 overflow-hidden rounded-xl border shadow-sm" style="border-color:rgba(11,29,42,0.15)"><div class="flex items-center justify-between border-b px-4 py-2 text-xs" style="border-color:rgba(11,29,42,0.1);background-color:#f0f4f8"><span class="font-mono" style="color:var(--color-thesis-muted)">S1_S2_Dry_Wet_Snow_Classification.js</span><div class="flex items-center gap-2"><a href="data:text/javascript;charset=utf-8,%2F**********************************************%0D%0A%20Wet%20vs%20Dry%20Snow%20classification%20(rule-based)%0D%0A%20Inputs%3A%20Sentinel-2%20(NDSI)%20%2B%20Sentinel-1%20(VV%2CVH%20in%20dB)%0D%0A%20Outputs%3A%200%20%3D%20No%20snow%2C%201%20%3D%20Dry%20snow%2C%202%20%3D%20Wet%20snow%0D%0A**********************************************%2F%0D%0A%0D%0A%2F%2F%20----------%20USER%20PARAMETERS%20----------%0D%0Avar%20aoi%20%3D%20table%3B%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%2F%2F%20replace%20with%20your%20imported%20table%20or%20geometry%0D%0AMap.centerObject(aoi%2C%209)%3B%0D%0AMap.addLayer(aoi.style(%7Bcolor%3A%22red%22%2C%20fillColor%3A%20%2200000000%22%7D)%2C%20%7B%7D%2C%20%22AOI%22)%3B%0D%0A%0D%0A%2F%2F%20Target%20analysis%20period%20(when%20you%20want%20to%20classify%20snow)%0D%0Avar%20targetStart%20%3D%20'2017-05-01'%3B%0D%0Avar%20targetEnd%20%20%20%3D%20'2017-05-30'%3B%0D%0A%0D%0A%2F%2F%20Baseline%20period%20used%20to%20detect%20abrupt%20backscatter%20drops%20(e.g.%2C%20preceding%20month)%0D%0Avar%20baselineStart%20%3D%20'2017-04-01'%3B%0D%0Avar%20baselineEnd%20%20%20%3D%20'2017-04-30'%3B%0D%0A%0D%0A%2F%2F%20Processing%20scale%20(meters)%0D%0Avar%20scale%20%3D%2010%3B%0D%0A%0D%0A%2F%2F%20Thresholds%20(defaults%20%E2%80%94%20**tune%20for%20your%20area**)%0D%0Avar%20ndsiSnowThresh%20%3D%200.4%3B%20%20%20%20%20%20%2F%2F%20NDSI%20threshold%20to%20call%20snow%0D%0Avar%20vvAbsoluteThresh%20%3D%20-11%3B%20%20%20%20%2F%2F%20If%20VV%20(dB)%20%3C%20this%20-%3E%20likely%20wet%20(absolute%20rule)%0D%0Avar%20deltaVVThresh%20%3D%20-2.0%3B%20%20%20%20%20%20%2F%2F%20If%20targetVV%20-%20baselineVV%20%3C%20this%20(dB)%20-%3E%20likely%20wet%20(relative%20rule)%0D%0Avar%20minSnowAreaPixels%20%3D%2010%3B%20%20%20%20%2F%2F%20minimum%20connected%20pixel%20area%20to%20keep%20(optional%20cleaning)%0D%0A%0D%0A%2F%2F%20--------------------------------------%0D%0A%2F%2F%201)%20Prepare%20Sentinel-2%20median%20composite%20%2B%20NDSI%0D%0A%2F%2F%20--------------------------------------%0D%0Avar%20s2%20%3D%20ee.ImageCollection(%22COPERNICUS%2FS2_SR_HARMONIZED%22)%0D%0A%20%20.filterBounds(aoi)%0D%0A%20%20.filterDate(targetStart%2C%20targetEnd)%0D%0A%20%20.filter(ee.Filter.lt('CLOUDY_PIXEL_PERCENTAGE'%2C%2080))%3B%0D%0A%0D%0Afunction%20prepS2(img)%20%7B%0D%0A%20%20var%20scl%20%3D%20img.select('SCL')%3B%0D%0A%20%20%2F%2F%20mask%20cloud%20%26%20cloud-shadow%20classes%20from%20SCL%20(3%3Dcloud%20shadow%2C%208-11%20clouds%2Fsnow%20etc.)%0D%0A%20%20var%20cloudMask%20%3D%20scl.eq(3)%20%2F%2F.or(scl.eq(8)).or(scl.eq(9)).or(scl.eq(10)).or(scl.eq(11))%3B%0D%0A%20%20img%20%3D%20img.updateMask(cloudMask.not())%3B%0D%0A%20%20var%20refl%20%3D%20img.select(%5B'B2'%2C'B3'%2C'B4'%2C'B8'%2C'B11'%5D).divide(10000)%3B%0D%0A%20%20var%20ndsi%20%3D%20refl.normalizedDifference(%5B'B3'%2C'B11'%5D).rename('NDSI')%3B%0D%0A%20%20var%20ndvi%20%3D%20refl.normalizedDifference(%5B'B8'%2C'B4'%5D).rename('NDVI')%3B%0D%0A%20%20return%20refl.addBands(ndsi).addBands(ndvi).copyProperties(img%2C%20img.propertyNames())%3B%0D%0A%7D%0D%0A%0D%0Avar%20s2_prepped%20%3D%20s2.map(prepS2)%3B%0D%0Avar%20s2_target%20%3D%20s2_prepped.median().clip(aoi)%3B%0D%0AMap.addLayer(s2_target.select(%5B'B4'%2C'B3'%2C'B2'%5D)%2C%20%7Bmin%3A0%2C%20max%3A1.3%7D%2C%20'S2%20RGB%20(target)')%3B%0D%0A%0D%0A%2F%2F%20NDSI%20image%0D%0Avar%20ndsiImg%20%3D%20s2_target.select('NDSI')%3B%0D%0AMap.addLayer(ndsiImg%2C%20%7Bmin%3A0%2C%20max%3A1%2C%20palette%3A%5B'blue'%2C'white'%5D%7D%2C%20'NDSI%20(target)')%3B%0D%0A%0D%0A%2F%2F%20Snow%20mask%20(binary)%0D%0Avar%20snowMask%20%3D%20ndsiImg.gt(ndsiSnowThresh).selfMask()%3B%20%2F%2F%20masked%20image%20for%20display%0D%0AMap.addLayer(snowMask%2C%20%7Bpalette%3A%5B'cyan'%5D%7D%2C%20'Snow%20mask%20(NDSI%3E'%20%2B%20ndsiSnowThresh%20%2B%20')')%3B%0D%0A%0D%0A%2F%2F%20--------------------------------------%0D%0A%2F%2F%202)%20Prepare%20Sentinel-1%20composites%20(target%20%26%20baseline)%20in%20dB%0D%0A%2F%2F%20--------------------------------------%0D%0Avar%20s1col%20%3D%20ee.ImageCollection('COPERNICUS%2FS1_GRD')%0D%0A%20%20.filterBounds(aoi)%0D%0A%20%20.filter(ee.Filter.eq('instrumentMode'%2C'IW'))%0D%0A%20%20.filter(ee.Filter.eq('orbitProperties_pass'%2C'ASCENDING'))%20%2F%2F%20optional%3A%20include%20both%20or%20choose%20pass%0D%0A%20%20.select(%5B'VV'%2C'VH'%5D)%3B%20%0D%0A%0D%0Afunction%20toDB_safe(img)%20%7B%0D%0A%20%20var%20vv%20%3D%20img.select('VV').where(img.select('VV').lte(0)%2C%201e-6)%3B%0D%0A%20%20var%20vh%20%3D%20img.select('VH').where(img.select('VH').lte(0)%2C%201e-6)%3B%0D%0A%20%20return%20ee.Image(%5Bvv.log10().multiply(10).rename('VV')%2C%0D%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20vh.log10().multiply(10).rename('VH')%5D)%0D%0A%20%20%20%20%20%20%20%20%20%20%20%20.copyProperties(img%2C%20img.propertyNames())%3B%0D%0A%7D%0D%0A%0D%0A%2F%2F%20target%20composite%0D%0Avar%20s1_target%20%3D%20s1col.filterDate(targetStart%2C%20targetEnd).map(toDB_safe).median().clip(aoi)%3B%0D%0AMap.addLayer(s1_target%2C%20%7Bbands%3A%5B'VV'%5D%2C%20min%3A-25%2C%20max%3A0%7D%2C%20'S1%20target%20VV%20(dB)')%3B%0D%0A%0D%0A%2F%2F%20baseline%20composite%0D%0Avar%20s1_baseline%20%3D%20s1col.filterDate(baselineStart%2C%20baselineEnd).map(toDB_safe).median().clip(aoi)%3B%0D%0AMap.addLayer(s1_baseline%2C%20%7Bbands%3A%5B'VV'%5D%2C%20min%3A-25%2C%20max%3A0%7D%2C%20'S1%20baseline%20VV%20(dB)')%3B%0D%0A%0D%0A%2F%2F%20Compute%20delta%20VV%20(target%20-%20baseline)%3B%20negative%20means%20drop%20in%20backscatter%0D%0Avar%20deltaVV%20%3D%20s1_target.select('VV').subtract(s1_baseline.select('VV')).rename('dVV')%3B%0D%0AMap.addLayer(deltaVV%2C%20%7Bmin%3A-6%2C%20max%3A6%2C%20palette%3A%5B'red'%2C'white'%2C'blue'%5D%7D%2C%20'%CE%94VV%20(target%20-%20baseline)')%3B%0D%0A%0D%0A%2F%2F%20Compute%20VH-VV%20difference%20and%20ratio%20(could%20help)%0D%0Avar%20vh%20%3D%20s1_target.select('VH')%3B%0D%0Avar%20vv%20%3D%20s1_target.select('VV')%3B%0D%0Avar%20vhMinusVv%20%3D%20vh.subtract(vv).rename('VH_minus_VV')%3B%0D%0Avar%20vhDivVv%20%3D%20vh.expression('vh%20-%20vv'%2C%20%7Bvh%3A%20vh%2C%20vv%3A%20vv%7D).rename('VH_minus_VV2')%3B%20%2F%2F%20same%20but%20as%20expression%0D%0A%0D%0A%2F%2F%20--------------------------------------%0D%0A%2F%2F%203)%20Classify%20wet%20vs%20dry%20within%20snow%20mask%0D%0A%2F%2F%20%20%20%20Rule%3A%20wet%20if%20(VV%20%3C%20absolute%20threshold)%20OR%20(%CE%94VV%20%3C%20delta%20threshold)%0D%0A%2F%2F%20%20%20%20Otherwise%20dry%20(within%20snowMask)%0D%0A%2F%2F%20--------------------------------------%0D%0Avar%20isSnow%20%3D%20ndsiImg.gt(ndsiSnowThresh)%3B%20%2F%2F%20boolean%20image%20(0%2F1)%0D%0Avar%20vvImg%20%3D%20s1_target.select('VV')%3B%0D%0Avar%20dVVimg%20%3D%20deltaVV.select('dVV')%3B%0D%0A%0D%0Avar%20wetRuleAbs%20%3D%20vvImg.lt(vvAbsoluteThresh)%3B%20%20%20%20%20%20%20%20%20%20%20%20%2F%2F%20absolute%20low%20VV%0D%0Avar%20wetRuleDelta%20%3D%20dVVimg.lt(deltaVVThresh)%3B%20%20%20%20%20%20%20%20%20%20%20%2F%2F%20sudden%20negative%20change%0D%0Avar%20wetRule%20%3D%20wetRuleAbs.or(wetRuleDelta)%3B%0D%0A%0D%0A%2F%2F%20Apply%20only%20within%20snow%0D%0Avar%20wetSnow%20%3D%20isSnow.and(wetRule)%3B%0D%0Avar%20drySnow%20%3D%20isSnow.and(wetRule.not())%3B%0D%0A%0D%0A%2F%2F%20Build%20classified%20map%3A%200%3Dno%20snow%2C%201%3Ddry%2C%202%3Dwet%0D%0Avar%20classImage%20%3D%20ee.Image(0).updateMask(ee.Image(1).clip(aoi))%3B%20%2F%2F%20start%20with%20zeros%20inside%20AOI%0D%0AclassImage%20%3D%20classImage.where(drySnow%2C%201)%3B%0D%0AclassImage%20%3D%20classImage.where(wetSnow%2C%202)%3B%0D%0A%0D%0A%2F%2F%20Clean%20small%20speckles%20(optional)%3A%20remove%20small%20objects%20using%20connectedPixelCount%0D%0Avar%20classMasked%20%3D%20classImage.updateMask(classImage.gte(0))%3B%20%2F%2F%20keep%20only%20AOI%0D%0Avar%20connected%20%3D%20classMasked.connectedPixelCount(256%2C%20true)%3B%20%2F%2F%20window%20radius%20big%20enough%0D%0Avar%20classClean%20%3D%20classMasked.updateMask(%20connected.gte(minSnowAreaPixels)%20).unmask(classMasked)%3B%0D%0A%0D%0A%2F%2F%20Visualization%20palette%0D%0Avar%20palette%20%3D%20%5B'ffffff'%2C%20'ffe67f'%2C%20'e61a6a'%5D%3B%20%2F%2F%20no-snow%20white%2C%20dry%20yellow%2C%20wet%20red%0D%0AMap.addLayer(classClean%2C%20%7Bmin%3A0%2C%20max%3A2%2C%20palette%3A%20palette%7D%2C%20'Snow%20classification%20(0%3Dnone%2C1%3Ddry%2C2%3Dwet)')%3B%0D%0A%0D%0A%2F%2F%20Legend%20helper%20(simple)%0D%0Avar%20legend%20%3D%20ui.Panel(%7Bstyle%3A%20%7Bposition%3A%20'bottom-left'%7D%7D)%3B%0D%0Alegend.add(ui.Label('Legend%3A%200%3Dno%20snow%2C%201%3Ddry%2C%202%3Dwet'))%3B%0D%0AMap.add(legend)%3B%0D%0A%0D%0A%2F%2F%20--------------------------------------%0D%0A%2F%2F%204)%20Diagnostics%20%26%20tuning%20aids%0D%0A%2F%2F%20%20%20%20-%20Show%20areas%20where%20absolute%20and%20delta%20rules%20fired%0D%0A%2F%2F%20%20%20%20-%20Export%20small%20thumbnails%20for%20inspection%0D%0A%2F%2F%20--------------------------------------%0D%0AMap.addLayer(wetRuleAbs.updateMask(wetRuleAbs)%2C%20%7Bpalette%3A%5B'magenta'%5D%7D%2C%20'Wet%20rule%20(VV%20%3C%20'%20%2B%20vvAbsoluteThresh%20%2B%20'%20dB)')%3B%0D%0AMap.addLayer(wetRuleDelta.updateMask(wetRuleDelta)%2C%20%7Bpalette%3A%5B'orange'%5D%7D%2C%20'Wet%20rule%20(%CE%94VV%20%3C%20'%20%2B%20deltaVVThresh%20%2B%20'%20dB)')%3B%0D%0A%0D%0A%2F%2F%20Print%20basic%20stats%0D%0Aprint('Area%20stats%20(pixel%20counts)%20of%20classes%20in%20AOI%20(approx)%3A'%2C%0D%0A%20%20classClean.reduceRegion(%7B%0D%0A%20%20%20%20reducer%3A%20ee.Reducer.frequencyHistogram()%2C%0D%0A%20%20%20%20geometry%3A%20aoi%2C%0D%0A%20%20%20%20scale%3A%20scale%2C%0D%0A%20%20%20%20maxPixels%3A%201e9%0D%0A%20%20%7D))%3B%0D%0A%0D%0A%2F%2F%20---%20Optional%3A%20export%20classification%20as%20GeoTIFF%20to%20Drive%20---%0D%0AExport.image.toDrive(%7B%0D%0A%20%20image%3A%20classClean.toUint8()%2C%0D%0A%20%20description%3A%20'snow_wet_dry_class'%2C%0D%0A%20%20folder%3A%20'Hohe-Tauren%20Snow%20Study'%2C%0D%0A%20%20fileNamePrefix%3A%20'snow_wet_dry_'%2BtargetStart%2B'_'%2BtargetEnd%2C%0D%0A%20%20region%3A%20aoi.geometry().bounds()%2C%0D%0A%20%20scale%3A%2010%2C%0D%0A%20%20crs%3A%20'EPSG%3A4326'%2C%0D%0A%20%20maxPixels%3A%201e13%0D%0A%7D)%3B%0D%0A%0D%0A%2F%2F%20--------------------------------------%0D%0A%2F%2F%205)%20Notes%20for%20tuning%20%26%20validation%0D%0A%2F%2F%20--------------------------------------%0D%0A%2F*%0D%0A-%20Thresholds%20are%20region-dependent.%20Suggested%20calibration%3A%0D%0A%20%20*%20Collect%20a%20few%20reference%20points%20(field%20measurements%20or%20very%20high-res%20imagery)%20with%20known%20wet%2Fdry%20labels.%0D%0A%20%20*%20Print%20S1%20values%20at%20those%20points%3A%20print(s1_target.reduceRegions(...))%20and%20adjust%20vvAbsoluteThresh%20%2F%20deltaVVThresh.%0D%0A%0D%0A-%20If%20you%20have%20multiple%20days%20of%20S1%2C%20deltaVV%20can%20be%20computed%20against%20a%20multi-year%20dry-season%20baseline%20for%20robustness.%0D%0A%0D%0A-%20Additional%20heuristics%20to%20improve%20classification%3A%0D%0A%20%20*%20Require%20NDSI%20%3E%20threshold%20AND%20NDVI%20below%20vegetation%20threshold%20to%20avoid%20bright%20vegetation%20confusion.%0D%0A%20%20*%20Use%20VH-VV%20or%20VH%2FVV%20ratio%3A%20wet%20snow%20may%20change%20polarization%20ratio.%0D%0A%20%20*%20Include%20topographic%20filters%20(slope%2Faspect)%20because%20steep%20shadows%20may%20bias%20S2%20and%20S1.%0D%0A%0D%0A-%20Evaluation%3A%0D%0A%20%20*%20If%20you%20have%20ground%20truth%2C%20compute%20confusion%20matrix%20and%20accuracy%20metrics%20in%20GEE%20(reduceRegions%20with%20confusion%20matrices).%0D%0A%20%20*%20Otherwise%20visually%20inspect%20classification%20together%20with%20S2%20RGB%2C%20NDSI%20and%20S1%20composites.%0D%0A%0D%0A-%20If%20patchiness%20is%20an%20issue%3A%20apply%20morphological%20opening%2Fclosing%20or%20increase%20minSnowAreaPixels.%0D%0A*%2F%0D%0A" download="S1_S2_Dry_Wet_Snow_Classification.js" class="rounded border px-2 py-1 text-[10px] uppercase tracking-widest hover:bg-white" style="border-color:rgba(11,29,42,0.2)">Download</a><button class="rounded px-2 py-1 text-[10px] uppercase tracking-widest text-white" style="background-color:var(--color-thesis-accent)">Copy</button></div></div><pre class="max-h-[520px] overflow-auto p-4 text-[12px] leading-[1.55]" style="background-color:#0a1929;color:#dce7f0"><code class="font-mono">/**********************************************
+ Wet vs Dry Snow classification (rule-based)
+ Inputs: Sentinel-2 (NDSI) + Sentinel-1 (VV,VH in dB)
+ Outputs: 0 = No snow, 1 = Dry snow, 2 = Wet snow
+**********************************************/
+
+// ---------- USER PARAMETERS ----------
+var aoi = table;                       // replace with your imported table or geometry
+Map.centerObject(aoi, 9);
+Map.addLayer(aoi.style({color:"red", fillColor: "00000000"}), {}, "AOI");
+
+// Target analysis period (when you want to classify snow)
+var targetStart = '2017-05-01';
+var targetEnd   = '2017-05-30';
+
+// Baseline period used to detect abrupt backscatter drops (e.g., preceding month)
+var baselineStart = '2017-04-01';
+var baselineEnd   = '2017-04-30';
+
+// Processing scale (meters)
+var scale = 10;
+
+// Thresholds (defaults — **tune for your area**)
+var ndsiSnowThresh = 0.4;      // NDSI threshold to call snow
+var vvAbsoluteThresh = -11;    // If VV (dB) &lt; this -&gt; likely wet (absolute rule)
+var deltaVVThresh = -2.0;      // If targetVV - baselineVV &lt; this (dB) -&gt; likely wet (relative rule)
+var minSnowAreaPixels = 10;    // minimum connected pixel area to keep (optional cleaning)
+
+// --------------------------------------
+// 1) Prepare Sentinel-2 median composite + NDSI
+// --------------------------------------
+var s2 = ee.ImageCollection("COPERNICUS/S2_SR_HARMONIZED")
+  .filterBounds(aoi)
+  .filterDate(targetStart, targetEnd)
+  .filter(ee.Filter.lt('CLOUDY_PIXEL_PERCENTAGE', 80));
+
+function prepS2(img) {
+  var scl = img.select('SCL');
+  // mask cloud &amp; cloud-shadow classes from SCL (3=cloud shadow, 8-11 clouds/snow etc.)
+  var cloudMask = scl.eq(3) //.or(scl.eq(8)).or(scl.eq(9)).or(scl.eq(10)).or(scl.eq(11));
+  img = img.updateMask(cloudMask.not());
+  var refl = img.select(['B2','B3','B4','B8','B11']).divide(10000);
+  var ndsi = refl.normalizedDifference(['B3','B11']).rename('NDSI');
+  var ndvi = refl.normalizedDifference(['B8','B4']).rename('NDVI');
+  return refl.addBands(ndsi).addBands(ndvi).copyProperties(img, img.propertyNames());
+}
+
+var s2_prepped = s2.map(prepS2);
+var s2_target = s2_prepped.median().clip(aoi);
+Map.addLayer(s2_target.select(['B4','B3','B2']), {min:0, max:1.3}, 'S2 RGB (target)');
+
+// NDSI image
+var ndsiImg = s2_target.select('NDSI');
+Map.addLayer(ndsiImg, {min:0, max:1, palette:['blue','white']}, 'NDSI (target)');
+
+// Snow mask (binary)
+var snowMask = ndsiImg.gt(ndsiSnowThresh).selfMask(); // masked image for display
+Map.addLayer(snowMask, {palette:['cyan']}, 'Snow mask (NDSI&gt;' + ndsiSnowThresh + ')');
+
+// --------------------------------------
+// 2) Prepare Sentinel-1 composites (target &amp; baseline) in dB
+// --------------------------------------
+var s1col = ee.ImageCollection('COPERNICUS/S1_GRD')
+  .filterBounds(aoi)
+  .filter(ee.Filter.eq('instrumentMode','IW'))
+  .filter(ee.Filter.eq('orbitProperties_pass','ASCENDING')) // optional: include both or choose pass
+  .select(['VV','VH']); 
+
+function toDB_safe(img) {
+  var vv = img.select('VV').where(img.select('VV').lte(0), 1e-6);
+  var vh = img.select('VH').where(img.select('VH').lte(0), 1e-6);
+  return ee.Image([vv.log10().multiply(10).rename('VV'),
+                   vh.log10().multiply(10).rename('VH')])
+            .copyProperties(img, img.propertyNames());
+}
+
+// target composite
+var s1_target = s1col.filterDate(targetStart, targetEnd).map(toDB_safe).median().clip(aoi);
+Map.addLayer(s1_target, {bands:['VV'], min:-25, max:0}, 'S1 target VV (dB)');
+
+// baseline composite
+var s1_baseline = s1col.filterDate(baselineStart, baselineEnd).map(toDB_safe).median().clip(aoi);
+Map.addLayer(s1_baseline, {bands:['VV'], min:-25, max:0}, 'S1 baseline VV (dB)');
+
+// Compute delta VV (target - baseline); negative means drop in backscatter
+var deltaVV = s1_target.select('VV').subtract(s1_baseline.select('VV')).rename('dVV');
+Map.addLayer(deltaVV, {min:-6, max:6, palette:['red','white','blue']}, 'ΔVV (target - baseline)');
+
+// Compute VH-VV difference and ratio (could help)
+var vh = s1_target.select('VH');
+var vv = s1_target.select('VV');
+var vhMinusVv = vh.subtract(vv).rename('VH_minus_VV');
+var vhDivVv = vh.expression('vh - vv', {vh: vh, vv: vv}).rename('VH_minus_VV2'); // same but as expression
+
+// --------------------------------------
+// 3) Classify wet vs dry within snow mask
+//    Rule: wet if (VV &lt; absolute threshold) OR (ΔVV &lt; delta threshold)
+//    Otherwise dry (within snowMask)
+// --------------------------------------
+var isSnow = ndsiImg.gt(ndsiSnowThresh); // boolean image (0/1)
+var vvImg = s1_target.select('VV');
+var dVVimg = deltaVV.select('dVV');
+
+var wetRuleAbs = vvImg.lt(vvAbsoluteThresh);            // absolute low VV
+var wetRuleDelta = dVVimg.lt(deltaVVThresh);           // sudden negative change
+var wetRule = wetRuleAbs.or(wetRuleDelta);
+
+// Apply only within snow
+var wetSnow = isSnow.and(wetRule);
+var drySnow = isSnow.and(wetRule.not());
+
+// Build classified map: 0=no snow, 1=dry, 2=wet
+var classImage = ee.Image(0).updateMask(ee.Image(1).clip(aoi)); // start with zeros inside AOI
+classImage = classImage.where(drySnow, 1);
+classImage = classImage.where(wetSnow, 2);
+
+// Clean small speckles (optional): remove small objects using connectedPixelCount
+var classMasked = classImage.updateMask(classImage.gte(0)); // keep only AOI
+var connected = classMasked.connectedPixelCount(256, true); // window radius big enough
+var classClean = classMasked.updateMask( connected.gte(minSnowAreaPixels) ).unmask(classMasked);
+
+// Visualization palette
+var palette = ['ffffff', 'ffe67f', 'e61a6a']; // no-snow white, dry yellow, wet red
+Map.addLayer(classClean, {min:0, max:2, palette: palette}, 'Snow classification (0=none,1=dry,2=wet)');
+
+// Legend helper (simple)
+var legend = ui.Panel({style: {position: 'bottom-left'}});
+legend.add(ui.Label('Legend: 0=no snow, 1=dry, 2=wet'));
+Map.add(legend);
+
+// --------------------------------------
+// 4) Diagnostics &amp; tuning aids
+//    - Show areas where absolute and delta rules fired
+//    - Export small thumbnails for inspection
+// --------------------------------------
+Map.addLayer(wetRuleAbs.updateMask(wetRuleAbs), {palette:['magenta']}, 'Wet rule (VV &lt; ' + vvAbsoluteThresh + ' dB)');
+Map.addLayer(wetRuleDelta.updateMask(wetRuleDelta), {palette:['orange']}, 'Wet rule (ΔVV &lt; ' + deltaVVThresh + ' dB)');
+
+// Print basic stats
+print('Area stats (pixel counts) of classes in AOI (approx):',
+  classClean.reduceRegion({
+    reducer: ee.Reducer.frequencyHistogram(),
+    geometry: aoi,
+    scale: scale,
+    maxPixels: 1e9
+  }));
+
+// --- Optional: export classification as GeoTIFF to Drive ---
+Export.image.toDrive({
+  image: classClean.toUint8(),
+  description: 'snow_wet_dry_class',
+  folder: 'Hohe-Tauren Snow Study',
+  fileNamePrefix: 'snow_wet_dry_'+targetStart+'_'+targetEnd,
+  region: aoi.geometry().bounds(),
+  scale: 10,
+  crs: 'EPSG:4326',
+  maxPixels: 1e13
+});
+
+// --------------------------------------
+// 5) Notes for tuning &amp; validation
+// --------------------------------------
+/*
+- Thresholds are region-dependent. Suggested calibration:
+  * Collect a few reference points (field measurements or very high-res imagery) with known wet/dry labels.
+  * Print S1 values at those points: print(s1_target.reduceRegions(...)) and adjust vvAbsoluteThresh / deltaVVThresh.
+
+- If you have multiple days of S1, deltaVV can be computed against a multi-year dry-season baseline for robustness.
+
+- Additional heuristics to improve classification:
+  * Require NDSI &gt; threshold AND NDVI below vegetation threshold to avoid bright vegetation confusion.
+  * Use VH-VV or VH/VV ratio: wet snow may change polarization ratio.
+  * Include topographic filters (slope/aspect) because steep shadows may bias S2 and S1.
+
+- Evaluation:
+  * If you have ground truth, compute confusion matrix and accuracy metrics in GEE (reduceRegions with confusion matrices).
+  * Otherwise visually inspect classification together with S2 RGB, NDSI and S1 composites.
+
+- If patchiness is an issue: apply morphological opening/closing or increase minSnowAreaPixels.
+*/
+</code></pre></div></div></article><div class="mx-auto grid max-w-3xl grid-cols-1 gap-4 px-6 pb-16 sm:grid-cols-2"><a href="conclusion.html" style="border-color:rgba(11,29,42,0.12);background-color:#fff" class="group rounded-lg border p-5 transition-all hover:-translate-y-0.5 hover:shadow-md"><span class="block text-[10px] uppercase tracking-[0.3em]" style="color:var(--color-thesis-muted)">← Previous</span><span class="font-display mt-1 block text-lg" style="color:var(--color-thesis-bg)">Conclusion</span></a><a href="references.html" style="border-color:rgba(11,29,42,0.12);background-color:#fff" class="group rounded-lg border p-5 text-right transition-all hover:-translate-y-0.5 hover:shadow-md"><span class="block text-[10px] uppercase tracking-[0.3em]" style="color:var(--color-thesis-muted)">Next<!-- --> →</span><span class="font-display mt-1 block text-lg" style="color:var(--color-thesis-bg)">References</span></a></div><footer class="px-6 py-12 text-center text-xs uppercase tracking-[0.25em]" style="background-color:var(--color-thesis-bg);color:var(--color-thesis-ice)"><div class="mx-auto mb-8 flex max-w-4xl flex-wrap items-center justify-center gap-6 rounded-md border px-6 py-4 sm:gap-10" style="background-color:var(--color-thesis-bg);border-color:var(--color-thesis-line)"><img src="pics/palacky_white.jpeg" alt="Palacký University Olomouc" class="h-10 w-auto object-contain sm:h-12" loading="lazy"><img src="pics/plus_logo.jpeg" alt="Paris Lodron University Salzburg" class="h-10 w-auto object-contain sm:h-12" loading="lazy"><img src="pics/copernicus_white.jpeg" alt="Copernicus Master in Digital Earth" class="h-10 w-auto object-contain sm:h-12" loading="lazy"><img src="pics/eu_logo.jpeg" alt="Co-funded by the European Union" class="h-10 w-auto object-contain sm:h-12" loading="lazy"></div><p>© 2026 Syeda Noor ul Saba Bukhari — All rights reserved</p><p class="mt-2 opacity-70">Erasmus Mundus Joint Master Degree · Copernicus Master in Digital Earth</p><p class="mt-2 opacity-70">Palacký University Olomouc &amp; Paris Lodron University Salzburg</p></footer></div><!--/$--><script src="js/reveal.js"></script></body></html>
